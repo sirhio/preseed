@@ -26,10 +26,17 @@ autoinstall:
     toggle: null
     variant: ''
   locale: en_US.UTF-8
-  network:
+network:
+    version: 2
     ethernets:
-      enpxxx:
-        dhcp4: true
+        zz-all-en:
+            match:
+                name: "en*"
+            dhcp4: true
+        zz-all-eth:
+            match:
+                name: "eth*"
+            dhcp4: true
     version: 2
   snaps:
   - channel: stable
