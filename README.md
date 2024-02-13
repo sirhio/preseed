@@ -28,7 +28,7 @@ autoinstall:
   locale: en_US.UTF-8
   network:
     ethernets:
-      enp0s3:
+      enpxxx:
         dhcp4: true
     version: 2
   snaps:
