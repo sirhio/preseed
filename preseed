@@ -147,4 +147,8 @@ autoinstall:
       id: mount-0
       type: mount
   updates: security
+  d-i preseed/late_command string \
+  mkdir -p /target/var/lib/cloud/instance/
+  d-i preseed/late_command string \
+  chown -R cloud-user:itrevel /target/var/lib/cloud
   version: 1
