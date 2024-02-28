@@ -71,7 +71,7 @@ popularity-contest popularity-contest/participate boolean false
 # B.4.11. Boot loader installation
 
 d-i grub-installer/only_debian boolean true
-d-i grub-installer/bootdev string /dev/vda
+d-i grub-installer/bootdev string /dev/sda
 
 # B.4.12. Finishing up the installation
 
