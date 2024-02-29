@@ -2,8 +2,8 @@
 d-i auto-install/enable boolean true
 d-i debconf/priority select critical
 ### Localization
-d-i debian-installer/locale string fr_FR
-d-i localechooser/supported-locales multiselect en_US.UTF-8, fr_FR.UTF-8
+d-i debian-installer/locale string en_US
+d-i localechooser/supported-locales en_US.UTF-8
 # Keyboard
 d-i console-setup/ask_detect boolean false
 d-i keyboard-configuration/xkb-keymap select fr
