@@ -1,66 +1,43 @@
-### Automatic Installation
-d-i auto-install/enable boolean true
-d-i debconf/priority select critical
-### Localization
-d-i debian-installer/locale string en_US
-d-i localechooser/supported-locales en_US.UTF-8
-# Keyboard
-d-i console-setup/ask_detect boolean false
-d-i keyboard-configuration/xkb-keymap select fr
-### Network
-d-i netcfg/choose_interface select auto
-d-i netcfg/link_wait_timeout string 10
-d-i netcfg/dhcp_timeout string 30
-d-i netcfg/get_hostname string imt-test
-d-i netcfg/get_domain string imt
-#d-i netcfg/hostname string $hostname
-#d-i netcfg/domain string $domaine
-d-i hw-detect/load_firmware boolean true
-### Apt
-d-i mirror/http/mirror select fr.archive.ubuntu.com
-### Account
-d-i passwd/root-login boolean true
-d-i passwd/root-password-crypted password $6$Tlc9BpTSuN0WUJC7$UcrBQBEKfP99ExtCU4WA5pXryCnU0veQpduz9XVgaYiVtjs1C9K.nrbgxFBG3zGa2Ihie41GbswPehLsoDw4v/
-# User
-d-i passwd/user-fullname string imt
-d-i passwd/user-password-crypted $6$ZRTZsEZm6Z9Y3Jfq$sGXB4Ao3EPLwLR8jJ3U4CQZNmygYyVmPP45m/id3.W45EbNfFISsRwoTTGtPIBySoCjFGiX7jtfdvW/Lz4yT1/
-d-i user-setup/allow-password-weak boolean true
-### Time
-d-i clock-setup/utc-auto boolean true
-d-i clock-setup/ntp boolean true
-d-i clock-setup/ntp-server string ntp.laas.fr
-### Disk
-d-i partman-auto/method string crytpo
-d-i partman-crypto/passphrase toto
-d-i partman-crypto/passphrase-again toto
-d-i partman-lvm/device_remove_lvm boolean true
-d-i partman-md/device_remove_md boolean true
-d-i partman-lvm/confirm boolean true
-d-i partman-lvm/confirm_nooverwrite boolean true
-d-i partman-auto-lvm/guided_size string max
-d-i partman-auto/choose_recipe select atomic
-d-i partman-partitioning/confirm_write_new_label boolean true
-d-i partman/choose_partition select finish
-d-i partman/confirm boolean true
-d-i partman/confirm_nooverwrite boolean true
-# Base system installation (voir B.4.9)
-# Apt
-## Repo
-d-i apt-setup/restricted boolean true
-d-i apt-setup/universe boolean true
-d-i apt-setup/multiverse boolean true
-d-i apt-setup/backports boolean true
-d-i apt-setup/services-select multiselect security
-d-i apt-setup/security_host string security.ubuntu.com
-d-i apt-setup/security_path string /ubuntu
-tasksel tasksel/first multiselect ubuntu-desktop
-d-i pkgsel/include string openssh-server build-essential vim
-## Whether to upgrade packages after debootstrap.
-#d-i pkgsel/upgrade select safe-upgrade
-d-i pkgsel/language-packs multiselect fr, en
-d-i pkgsel/update-policy select unattended-upgrades
-d-i pkgsel/updatedb boolean true
-d-i grub-installer/only_debian boolean true
-d-i grub-installer/with_other_os boolean true
-d-i grub-installer/bootdev  string default
-d-i finish-install/reboot_in_progress note
+# Ubuntu 20.04 autoinstall YAML configuration
+
+# Localization
+keyboard: en_US
+language: en
+locale: en_US.UTF-8
+timezone: America/New_York
+
+# Network configuration
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp-identifier: mac
+
+# Users and passwords
+users:
+  - name: itrevel
+    passwd: $6$cM2.0aqavyHp.wTN$mrPkzfxvElT.l4e93gwDZbzecjEbrIyoz76S/AVHoKW9RFLP2SaG0xPNbi753ivTN0etUk6jhjP4hiXmJrDm5. # Change this to a secure password hash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, sudo, video]
+
+# SSH configuration
+ssh:
+  allow-pw: true
+  authorized-keys: 
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDVkmJWjG5ZrfcANziB1WDlKvht7QQMTAVaTo3kWne7KiznA28X3nE8aHbfJpC7RlVzsU02KdN+jzFJKGxUdpTrkXtCxgGz1mbiHL7QOJKQ4UT9V4fZz4UJ7W7xK8M4g5pbqBfS5QXz/9j6tY1ONtLsR0R+xOTD8hFTyzEBOhOHFbwQVzfbpmhGHc20hpbudQCqAalCXySgGm0TgTX9OaTVtT3WQL/jyMiFEw3vJDrzWAMq4jLevONhqBv35H5aW9N9Hb+GCOmcH66bCHbN7QvDGrET9qS6m/YFGCW2RPEWx/yjqJp1KAZvqUg/wGnoN7Zi77A0eX12Wq9iDS22sYZPKC5/QPzHxPj2sPrS/DJN60wdxF7pHWBGf9ayXWRO6iMzDZQrQd8p6y1z1ms66bD8HSzWcgH/j46Dbyr8WkT3v19Yr+sNixunPvoe/9pQ+XzQfzVLuV9fPdRH4WTb7fYV2mBmKz04v/hfjJ+6BzfbtUHZq3NK2rG3q4aKdX2NVkC3mV+7tFk= ubuntu@hostname
+
+# Storage configuration
+storage:
+  layout:
+    name: lvm
+
+# Installations
+# These settings ensure automatic installation without any prompts
+install:
+  - automatic: true
+  - wipe: superblock
+  - overwrite: true
+  - upgrades: none
+  - packages:
+      - ubuntu-server
